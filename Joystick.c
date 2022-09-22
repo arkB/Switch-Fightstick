@@ -221,7 +221,7 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 			state = MOVE_X;
 			break;
 		case STOP_Y:
-			if (ypos < 120 - 1)
+			if (ypos < 320 - 1)
 				state = MOVE_Y;
 			else
 				state = DONE;
@@ -237,7 +237,7 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 				ReportData->HAT = HAT_RIGHT;
 				xpos++;
 			}
-			if (xpos > 0 && xpos < 320 - 1)
+			if (xpos > 0 && xpos < 120 - 1)
 				state = STOP_X;
 			else
 				state = STOP_Y;
@@ -259,7 +259,7 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 
 	// Inking
 	if (state != SYNC_CONTROLLER && state != SYNC_POSITION)
-		if (pgm_read_byte(&(image_data[(xpos / 8) + (ypos * 40)])) & 1 << (xpos % 8))
+		if (pgm_read_byte(&(image_data[(ypos / 8) + (xpos * 40)])) & 1 << (ypos % 8))
 			ReportData->Button |= SWITCH_A;
 
 	// Prepare to echo this report

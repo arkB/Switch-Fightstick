@@ -20,9 +20,9 @@ def main(argv):
     elif opt == '-i':
       invertColormap = True
 
-  im = Image.open(args[0])                # import 320x120 png
-  if not (im.size[0] == 320 and im.size[1] == 120):
-    print("ERROR: Image must be 320px by 120px!")
+  im = Image.open(args[0])                # import 120x320 png
+  if not (im.size[0] == 120 and im.size[1] == 320):
+    print("ERROR: Image must be 120px by 320px!")
     sys.exit()
 
   im = im.convert("1")                    # convert to bilevel image
@@ -35,12 +35,12 @@ def main(argv):
   if not (previewBilevel or saveBilevel):
     im_px = im.load()
     data = []
-    for i in range(0,120):                # iterate over the columns
-      for j in range(0,320):              # and convert 255 vals to 0 to match logic in Joystick.c and invertColormap option
+    for j in range(0,120):                # iterate over the columns
+      for i in range(0,320):              # and convert 255 vals to 0 to match logic in Joystick.c and invertColormap option
          data.append(0 if im_px[j,i] == 255 else 1)
 
     str_out = "#include <stdint.h>\n#include <avr/pgmspace.h>\n\nconst uint8_t image_data[0x12c1] PROGMEM = {"
-    for i in range(0, round((320*120) / 8)): # for some reason, this is being interpreted as a float?
+    for i in range(0, (320*120) // 8): # for some reason, this is being interpreted as a float?
        val = 0;
 
        for j in range(0, 8):
